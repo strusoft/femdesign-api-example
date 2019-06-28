@@ -45,6 +45,7 @@ xml_loadcombs = []
 xml_pointloads = []
 xml_lineloads = []
 xml_surfaceloads = []
+xml_complexsection = []
 orgUTC = '1970-01-01T00:00:00.000'
 
 root_mat = tree_mat.getroot()
@@ -144,7 +145,7 @@ def normal(point1, point2, rot): # This function will find the normal to a plane
 
 
 def initiateModel(annex):
-    global xml_annex, xml_root, xml_entities, xml_loads, xml_supports, xml_advanced
+    global xml_annex, xml_root, xml_entities, xml_loads, xml_supports, xml_advanced, xml_sections
     xml_annex = annex
     xml_root = ET.Element('database', struxml_version='01.00.000', source_software='FEM-Design 18.00.002', start_time=orgUTC, end_time=genUTC(), guid=genGUID(), convertid='00000000-0000-0000-0000-000000000000', standard='EC', country=annex, xmlns='urn:strusoft')
     xml_entities = ET.SubElement(xml_root, 'entities')
@@ -157,6 +158,9 @@ def initiateModel(annex):
 
 
 def finish(filename):
+    for x in xml_complexsection:
+        xml_sections.remove(x)
+        xml_sections.append(x)
     for li in [xml_bars, xml_shells]: # sorting loop
         for x in li:
             xml_entities.remove(x)
@@ -246,6 +250,7 @@ def addSection(section, eccentricity):
         add_section.attrib['fd-mat'] = '3'
     if sec_name[0] == 'Timber sections':
         add_section.attrib['fd-mat'] = '4'
+    xml_complexsection.append(add_section_complex)
     return [simpGUID, complexGUID, secFabric, eccentricity]
 
 
