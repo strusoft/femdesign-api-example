@@ -309,7 +309,8 @@ def runFD(analysis, save, close, design, filename, batchfile='', exportfile=''):
         if analysis == '2ND':
             run_combitem.attrib['NLE'] = '1'
             run_combitem.attrib['f2nd'] = '1'
-    ET.SubElement(run_root, 'cmdlistgen', command='$ MODULECOM LISTGEN', bscfile=dir_path + '\\' + batchfile, outfile=dir_path + '\\' + exportfile)
+    if batchfile != '':
+        ET.SubElement(run_root, 'cmdlistgen', command='$ MODULECOM LISTGEN', bscfile=dir_path + '\\' + batchfile, outfile=dir_path + '\\' + exportfile)
     if save == True:
         run_cmdsave = ET.SubElement(run_root, 'cmdsave', command='; CXL CS2SHELL SAVE')
         run_save = ET.SubElement(run_cmdsave, 'filename')
